@@ -12,6 +12,10 @@
           <i class="las la-hippo"></i>
           <span>Pokemons</span>
         </a-menu-item>
+        <a-menu-item key="3" @click="$auth.logout(), $router.push('/login')">
+          <i class="las la-hippo"></i>
+          <span>Cerrar sessión</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>

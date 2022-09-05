@@ -16,12 +16,12 @@
         <!-- Sign In Form -->
         <a-form class="login-form" @submit.prevent="handleSubmit">
           <a-form-item class="mb-10" label="Correo electrónico" :colon="false">
-            <a-input v-model="email"
+            <a-input v-model="form.email"
               v-decorator="['email', { rules: [{ required: true, message: 'Ingresar correo electrónico' }] },]"
               placeholder="Correo electrónico" />
           </a-form-item>
           <a-form-item class="mb-5" label="Contraseña" :colon="false">
-            <a-input v-model="password" v-decorator="[
+            <a-input v-model="form.password" v-decorator="[
               'password',
               { rules: [{ required: true, message: 'Ingresar contraseña' }] },
             ]" type="password" placeholder="Contraseña" />
@@ -50,25 +50,29 @@ import { login } from '@/api/authService'
 export default ({
   data() {
     return {
-      email: 'luis@example.com',
-      password: 'secret',
-      rememberMe: true,
+      form: {
+        email: 'luis@example.com',
+        password: 'secret',
+      }
     }
   },
   methods: {
     // Handles input validation after submission.
     async handleSubmit(e) {
       const data = JSON.stringify({
-        email: this.email,
-        password: this.password
+        email: this.form.email,
+        password: this.form.password
       })
-      await login(data).then(response => {
+      await login(data).then(async response => {
+        // this.$auth.$storage.setUniversal('access_token', response.data.access_token)
+        // console.log(this.$auth.$state)
+        this.$auth.setUserToken(response.data.access_token)
+        await this.$router.push('/');
         localStorage.setItem('access_token', response.data.access_token)
       }).catch(error => {
         console.log(error)
       })
 
-      await this.$router.push('/');
     },
   },
 })
