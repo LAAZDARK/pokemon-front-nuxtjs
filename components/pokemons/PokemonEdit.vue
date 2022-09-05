@@ -1,15 +1,16 @@
 <template>
   <div>
     <a-button type="primary" @click="showModal">Editar</a-button>
-    <a-modal v-model:visible="visible" title="Nombre" :confirm-loading="confirmLoading" @ok="handleOk">
-      <label for="">Nombre</label>
+    <a-modal v-model:visible="visible" title="Editar pokemon" :confirm-loading="confirmLoading" @ok="handleOk"
+      okText="Actualizar" cancelText="Cancelar">
+      <label for="first-name" class="subpixel-antialiased">Nombre</label>
       <a-input class="mb-5" v-model="props.pokemon.name" placeholder="Nombre" />
-      <label for="">Peso</label>
+      <label for="" class="subpixel-antialiased">Peso</label>
       <a-input class="mb-5" v-model="props.pokemon.weight" placeholder="Peso" />
-      <label for="">Alto</label>
+      <label for="" class="subpixel-antialiased">Alto</label>
       <a-input class="mb-5" v-model="props.pokemon.height" placeholder="Alto" />
       <div>
-        <b for="">Habilidades:</b><br>
+        <b class="text-gray-500">Habilidades:</b><br>
         <span v-for=" ability in props.pokemon.abilities" :key="ability.slot">
           - <label for="">{{ ability.ability.name }}</label><br>
         </span>

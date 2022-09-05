@@ -1,7 +1,8 @@
 <template>
   <div>
     <a-button type="primary" @click="showModal">Editar</a-button>
-    <a-modal v-model:visible="visible" title="Nombre" :confirm-loading="confirmLoading" @ok="handleOk">
+    <a-modal v-model:visible="visible" title="Nombre" :confirm-loading="confirmLoading" @ok="handleOk"
+      okText="Actualizar" cancelText="Cancelar">
       <a-input class="mb-5" v-model="props.team.name" placeholder="Nombre del equipo" />
       <div></div>
       <a-select mode="multiple" v-model="props.team.pokemons" :defaultValue="[props.team.pokemons]" style="width: 100%"

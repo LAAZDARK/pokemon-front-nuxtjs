@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-table :columns="columns" :dataSource="dataList" rowKey="_id" size="small">
+    <a-table :columns="columns" :dataSource="dataList" rowKey="_id" :scroll="{ x: 1200 }" size="small">
       <template v-for="col in ['name', 'updatedAt', 'createdAt']" :slot="col" slot-scope="text, record, index">
         <div>
           {{ text }}
@@ -14,14 +14,12 @@
       </template>
       <template slot="operation" slot-scope="text, record, index">
         <div class='editable-row-operations'>
-          <a-row type="flex" justify="space-around">
-            <a-col :span="4">
-              <PokemonEdit @change="handlePokemons" :pokemon="record" />
-            </a-col>
-            <a-col :span="4">
-              <a-button class="float-left" type="danger" @click="handleDelete(record._id)">Eliminar</a-button>
-            </a-col>
-          </a-row>
+          <div class="flex items-center">
+            <PokemonEdit @change="handlePokemons" :pokemon="record" />
+            <a-popconfirm title="¿Esta seguro?" okText="Si" cancelText="No" @confirm="handleDelete(record._id)">
+              <a-button class="float-left ml-2" type="danger">Eliminar</a-button>
+            </a-popconfirm>
+          </div>
         </div>
       </template>
     </a-table>

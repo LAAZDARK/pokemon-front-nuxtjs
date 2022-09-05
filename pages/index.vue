@@ -13,13 +13,13 @@ export default Vue.extend({
   name: "IndexPage",
   data() {
     return {
-      message: ""
+      message: "",
     };
   },
   async mounted() {
     try {
       const response = await getUser();
-      console.log(response);
+      console.log(response.data);
     }
     catch (e) {
       this.message = "You are not logged in";

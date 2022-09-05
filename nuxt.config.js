@@ -11,6 +11,11 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
+    script: [
+      {
+        src: 'https://cdn.tailwindcss.com',
+      },
+    ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
@@ -28,7 +33,7 @@ export default {
   css: ['ant-design-vue/dist/antd.css'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/antd-ui'],
+  plugins: ['@/plugins/antd-ui', '@/plugins/moment'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

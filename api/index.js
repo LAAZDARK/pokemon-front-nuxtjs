@@ -1,11 +1,8 @@
 /* eslint-disable */
 import axios from 'axios'
-// import store from '@/store'
-// import {isUserLoggedIn} from "@/auth/utils";
 
 /* definir url base */
 const baseURL = 'http://localhost:4000/api/v1'
-// const baseURL = 'https://api.ostrail.com/api/v1'
 
 /* crear instancia axios */
 const apiInstance = axios.create({
