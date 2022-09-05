@@ -3,12 +3,12 @@
     <a-table :columns="columns" :dataSource="dataList" rowKey="_id" size="small">
       <template v-for="col in ['name', 'updatedAt', 'createdAt']" :slot="col" slot-scope="text, record, index">
         <div>
-          {{text}}
+          {{ text }}
         </div>
       </template>
       <template slot="abilities" slot-scope="abilities">
         <span v-for="a in abilities" :key="a.slot">
-          | {{a.ability.name}}
+          | {{ a.ability.name }}
 
         </span>
       </template>
@@ -16,7 +16,7 @@
         <div class='editable-row-operations'>
           <a-row type="flex" justify="space-around">
             <a-col :span="4">
-              <PokemonEdit :pokemon="record" />
+              <PokemonEdit @change="handlePokemons" :pokemon="record" />
             </a-col>
             <a-col :span="4">
               <a-button class="float-left" type="danger" @click="handleDelete(record._id)">Eliminar</a-button>
@@ -27,11 +27,12 @@
     </a-table>
   </div>
 </template>
-<script>
+<script setup lang="ts">
 import { getPokemons, deletePokemon } from '@/api/pokemonService'
+import { onMounted, ref } from 'vue';
 import PokemonEdit from './PokemonEdit.vue'
 const columns = [{
-title: 'Id',
+  title: 'Id',
   dataIndex: 'no',
   scopedSlots: { customRender: 'no' },
 }, {
@@ -57,33 +58,33 @@ title: 'Id',
   scopedSlots: { customRender: 'operation' },
 }]
 
-export default {
-    data() {
-        return {
-            columns,
-            dataList: null,
-        };
-    },
-    mounted() {
-      this.handlePokemons()
-    },
-    methods: {
-      async handlePokemons() {
-        await getPokemons().then(response => {
-          this.dataList = response.data
-        }).catch(error => {
-          console.error(error)
-        })
-      },
-      async handleDelete(id) {
-        await deletePokemon(id).then(() => {
-        }).catch(error => {
-          console.error(error)
-        })
-      },
-    },
-    components: { PokemonEdit }
-}
+onMounted(() => {
+  handlePokemons()
+})
+
+interface Pokemons {
+  name: String,
+  no: Number,
+};
+
+const dataList = ref<Pokemons>()
+
+
+const handlePokemons = async () => {
+  await getPokemons().then(response => {
+    dataList.value = response.data
+  }).catch(error => {
+    console.error(error)
+  })
+};
+const handleDelete = async (id: string) => {
+  await deletePokemon(id).then(async () => {
+    await handlePokemons()
+  }).catch(error => {
+    console.error(error)
+  })
+};
+
 </script>
 <style scoped>
 .editable-row-operations a {

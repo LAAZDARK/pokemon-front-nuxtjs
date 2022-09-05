@@ -6,13 +6,13 @@
       <div></div>
       <a-select mode="multiple" v-model="props.team.pokemons" :defaultValue="[props.team.pokemons]" style="width: 100%"
         placeholder="Seleccionar pokemon">
-        <a-select-option v-for="pokemon in pokemons" :key="pokemon.no">{{pokemon.name}}</a-select-option>
+        <a-select-option v-for="pokemon in pokemons" :key="pokemon.no">{{ pokemon.name }}</a-select-option>
       </a-select>
     </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { updateTeam } from '@/api/teamService'
 import { getPokemons } from '@/api/pokemonService'
 
@@ -25,14 +25,16 @@ interface Props {
 }
 
 interface Pokemons {
-    name: String,
-    no: Number,
+  name: String,
+  no: Number,
 };
 
 const props = defineProps<Props>();
 const visible = ref<boolean>(false);
 const confirmLoading = ref<boolean>(false);
-  const pokemons = ref<Pokemons>()
+const pokemons = ref<Pokemons>()
+
+const emit = defineEmits(['change'])
 
 onMounted(() => {
   handlePokemons()
@@ -43,25 +45,25 @@ const showModal = () => {
 };
 
 const handleOk = () => {
-      confirmLoading.value = true;
-      updateTeam(props.team).then(response => {
-        visible.value = false;
-        confirmLoading.value = false;
-        console.log(response)
-      }).catch(error => {
-        confirmLoading.value = false;
-        console.error(error)
-      })
-    };
+  confirmLoading.value = true;
+  updateTeam(props.team).then(response => {
+    visible.value = false;
+    confirmLoading.value = false;
+    emit('change')
+  }).catch(error => {
+    confirmLoading.value = false;
+    console.error(error)
+  })
+};
 
-  const handlePokemons = async () => {
-    await getPokemons().then(response => {
-      pokemons.value = response.data
-      console.log(pokemons.value);
-    }).catch(error => {
-      console.log(error)
-    })
-  };
+const handlePokemons = async () => {
+  await getPokemons().then(response => {
+    pokemons.value = response.data
+    console.log(pokemons.value);
+  }).catch(error => {
+    console.log(error)
+  })
+};
 
 </script>
 

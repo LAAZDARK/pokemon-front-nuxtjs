@@ -29,16 +29,10 @@
   </a-layout>
 </template>
 <script lang="ts" setup>
-import {ref } from 'vue';
+import { ref } from 'vue';
 import Team from './teams/Team.vue';
 import Pokemon from './pokemons/Pokemon.vue';
-// import {
-//   UserOutlined,
-//   VideoCameraOutlined,
-//   UploadOutlined,
-//   MenuUnfoldOutlined,
-//   MenuFoldOutlined,
-// } from '@ant-design/icons-vue';
+
 
 const selectedKeys = ref<string[]>(['1']);
 const collapsed = ref<boolean>(false);

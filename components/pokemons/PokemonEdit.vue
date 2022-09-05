@@ -11,14 +11,14 @@
       <div>
         <b for="">Habilidades:</b><br>
         <span v-for=" ability in props.pokemon.abilities" :key="ability.slot">
-          - <label for="">{{ability.ability.name}}</label><br>
+          - <label for="">{{ ability.ability.name }}</label><br>
         </span>
       </div>
     </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
+import { ref } from 'vue';
 import { updatePokemon } from '@/api/pokemonService'
 
 interface Props {
@@ -37,21 +37,23 @@ const props = defineProps<Props>();
 const visible = ref<boolean>(false);
 const confirmLoading = ref<boolean>(false);
 
+const emit = defineEmits(['change'])
+
 const showModal = () => {
   visible.value = true;
 };
 
 const handleOk = () => {
-      confirmLoading.value = true;
-      updatePokemon(props.pokemon).then(response => {
-        visible.value = false;
-        confirmLoading.value = false;
-        console.log(response)
-      }).catch(error => {
-        confirmLoading.value = false;
-        console.error(error)
-      })
-    };
+  confirmLoading.value = true;
+  updatePokemon(props.pokemon).then(() => {
+    visible.value = false;
+    confirmLoading.value = false;
+    emit('change')
+  }).catch(error => {
+    confirmLoading.value = false;
+    console.error(error)
+  })
+};
 
 </script>
 
