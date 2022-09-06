@@ -1,6 +1,10 @@
 <template>
   <div>
-    <a-table :columns="columns" :dataSource="dataList" rowKey="_id" :scroll="{ x: 1200 }" size="small">
+    <!-- <div class="flex justify-end">
+      <a-button class="mb-5" type="primary" :disabled="isLoading" @click="handleSeedPokemons">Cargar pokemon</a-button>
+    </div> -->
+    <a-table :loading="isLoading" :columns="columns" :dataSource="dataList" rowKey="_id" :scroll="{ x: 1200 }"
+      size="small">
       <template v-for="col in ['name', 'updatedAt', 'createdAt']" :slot="col" slot-scope="text, record, index">
         <div>
           {{ text }}
@@ -26,8 +30,9 @@
   </div>
 </template>
 <script setup lang="ts">
-import { getPokemons, deletePokemon } from '@/api/pokemonService'
 import { onMounted, ref } from 'vue';
+import { getPokemons, deletePokemon } from '@/api/pokemonService'
+import { seedExecute } from '@/api/seederService'
 import PokemonEdit from './PokemonEdit.vue'
 const columns = [{
   title: 'Id',
@@ -65,13 +70,18 @@ interface Pokemons {
   no: Number,
 };
 
-const dataList = ref<Pokemons>()
+const dataList = ref<Pokemons>();
+
+const isLoading = ref<boolean>(false);
 
 
 const handlePokemons = async () => {
+  isLoading.value = true
   await getPokemons().then(response => {
     dataList.value = response.data
+    isLoading.value = false
   }).catch(error => {
+    isLoading.value = false
     console.error(error)
   })
 };
@@ -82,6 +92,22 @@ const handleDelete = async (id: string) => {
     console.error(error)
   })
 };
+
+const handleSeedPokemons = async () => {
+  isLoading.value = true
+  await seedExecute()
+  setTimeout(() => {
+    handlePokemons()
+  }, 15);
+  // await getPokemons().then(response => {
+  //   dataList.value = response.data
+  //   isLoading.value = false
+  // }).catch(error => {
+  //   isLoading.value = false
+  //   console.error(error)
+  // })
+
+}
 
 </script>
 <style scoped>

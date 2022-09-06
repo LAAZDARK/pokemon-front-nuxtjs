@@ -1,7 +1,8 @@
 <template>
   <div>
     <TeamCreate @change="handleTeams"></TeamCreate>
-    <a-table :columns="columns" :dataSource="dataList" rowKey="_id" :scroll="{ x: 1200 }" size="small">
+    <a-table :columns="columns" :loading="isLoading" :dataSource="dataList" rowKey="_id" :scroll="{ x: 1200 }"
+      size="small">
       <template v-for="col in ['name', 'updatedAt', 'createdAt']" :slot="col" slot-scope="text, record, index">
         <div>
           {{ text }}
@@ -60,15 +61,19 @@ interface Teams {
 };
 
 const dataList = ref<Teams>()
+const isLoading = ref<boolean>(false);
 
 onMounted(() => {
   handleTeams()
 })
 
 const handleTeams = async () => {
+  isLoading.value = true
   await getTeams().then(response => {
     dataList.value = response.data
+    isLoading.value = false
   }).catch(error => {
+    isLoading.value = false
     console.error(error)
   })
 };
